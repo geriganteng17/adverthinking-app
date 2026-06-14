@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        // Polyfill to resolve conflicts where libraries (like formdata-polyfill) attempt to assign window.fetch
+        try {
+            if (typeof window !== 'undefined') {
+                // Ensure FormData prototype has keys to prevent formdata-polyfill from executing its assignment block
+                if (typeof FormData !== 'undefined') {
+                    if (!FormData.prototype.keys) {
+                        FormData.prototype.keys = function* () {};
+                    }
+                    if (!FormData.prototype.values) {
+                        FormData.prototype.values = function* () {};
+                    }
+                    if (!FormData.prototype.entries) {
+                        FormData.prototype.entries = function* () {};
+                    }
+                    if (!FormData.prototype[Symbol.iterator]) {
+                        FormData.prototype[Symbol.iterator] = FormData.prototype.entries;
+                    }
+                }
+
+                // Make fetch descriptor writable on window in environments (like sandbox/iframes) where it has only a getter
+                const desc = Object.getOwnPropertyDescriptor(window, 'fetch') || Object.getOwnPropertyDescriptor(Object.getPrototypeOf(window), 'fetch');
+                if (desc && (!desc.writable || !desc.set)) {
+                    let currentFetch = window.fetch;
+                    try {
+                        Object.defineProperty(window, 'fetch', {
+                            get() { return currentFetch; },
+                            set(v) { currentFetch = v; },
+                            configurable: true,
+                            enumerable: true
+                        });
+                    } catch (e) {
+                        try {
+                            Object.defineProperty(Object.getPrototypeOf(window), 'fetch', {
+                                get() { return currentFetch; },
+                                set(v) { currentFetch = v; },
+                                configurable: true,
+                                enumerable: true
+                            });
+                        } catch (err) {
+                            console.warn("Could not patch fetch writeability:", err);
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            console.error("Fetch/FormData polyfill error:", e);
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adverthinking AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        // Set tema SEBELUM paint — anti flash salah tema (default dark)
+        try {
+            if (localStorage.getItem('adv_theme') !== 'light') {
+                document.documentElement.classList.add('dark');
+            }
+        } catch (e) { document.documentElement.classList.add('dark'); }
+    </script>
+    <style>
+        /* Warna dikelola index.css (light/dark via class .dark) — di sini layout dasar saja */
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+        *, *::before, *::after {
+            box-sizing: inherit;
+        }
+    </style>
+
+  <script type="module" crossorigin src="/adverthinking-app/assets/index-MuOnwkKD.js"></script>
+  <link rel="stylesheet" crossorigin href="/adverthinking-app/assets/index-DbV7R8-v.css">
+</head>
+<body>
+    <div id="root"></div>
+</body>
+</html>

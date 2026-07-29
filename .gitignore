@@ -1,0 +1,9 @@
+
+# Bonus/produk berbayar JANGAN pernah masuk repo publik (pelajaran audit 28 Jul 2026):
+# hapus file gak menghapus jejaknya di riwayat git — jadi jangan pernah masuk dari awal.
+# Delivery pakai storage berautentikasi (Supabase Storage / Drive), bukan file di repo.
+*.pdf
+*.zip
+*.xlsx
+*.docx
+*.epub
